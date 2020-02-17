@@ -1,0 +1,4 @@
+[api]
+email = OMD_ZULIP_EMAIL
+key = OMD_ZULIP_KEY
+site = OMD_ZULIP_SITE

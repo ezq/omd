@@ -1,0 +1,22 @@
+omd-test:
+  ports:
+  - 8443:443/tcp
+  environment:
+    SITENAME: malta-test
+    OMDPASSWORD: Devops.2019
+    OMD_HOSTNAME: omd.bet3000.local
+    OMD_EXIM_DOMAIN: bet3000.com
+    OMD_SMARTHOST: newwhite-1.bet3000.local
+    OMD_ZULIP_EMAIL: nagios-bot@surhive.zulipchat.com
+    OMD_ZULIP_KEY: IALj3vOhKxELKXzj2iC6xmsrV9aAgtXF
+    OMD_ZULIP_SITE: https://surhive.zulipchat.com/api
+  log_driver: ''
+  labels:
+    io.rancher.container.pull_image: always
+    io.rancher.scheduler.affinity:host_label: omd-test=true
+  tty: true
+  log_opt: {}
+  image: local/omd-labs-debian:v2.90
+  volumes:
+    - ./malta-test/etc:/opt/omd/sites/malta-test/etc.mount
+  stdin_open: true
