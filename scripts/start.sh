@@ -106,6 +106,8 @@ echo
 
 omd config ${SITENAME} set CORE nagios
 omd config $SITENAME set THRUK_COOKIE_AUTH off
+sed -i '/default_theme/ s/Thruk2/Vautour/g' /omd/sites/monitor/etc/thruk/thruk.conf
+
 
 echo "omd-labs: Starting site $SITENAME..."
 echo "--------------------------------------"
