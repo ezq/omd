@@ -1,23 +1,12 @@
 #!/usr/bin/env bash
 export OMD_ROOT=/opt/omd/sites/$SITENAME
-#source /root/.sitename.env
+source /root/.sitename.env
 
-
-if ! omd sites | grep $SITENAME; then
-  omd create -u 1000 -g 1000 $SITENAME
-  sudo su - $SITENAME -c "set_admin_password $OMDPASSWORD"
-fi
-
-[ -d "$OMD_ROOT" ] && omd init $SITENAME && sudo su - $SITENAME -c "set_admin_password $OMDPASSWORD"
 
 echo "Config and start OMD site: $SITENAME"
 echo "--------------------------------------"
 
-chown -R $SITENAME:$SITENAME $OMD_ROOT
-
 trap "omd stop $SITENAME; exit 0" SIGKILL SIGTERM SIGHUP SIGINT
-
-
 
 # mounts empty => sync dirs in mounts        / lsyncd dir->mount
 # mounts not empty => sync mounts in dirs    / lsyncd dir->mount
@@ -79,14 +68,14 @@ EOF
   su - $SITENAME -c 'lsyncd ~/.lsyncd'
 fi
 
-echo "configuring smarthost..."
-sed -i "s/OMD_HOSTNAME/$OMD_HOSTNAME/g" /etc/exim4/update-exim4.conf.conf
-sed -i "s/OMD_EXIM_DOMAIN/$OMD_EXIM_DOMAIN/g" /etc/exim4/update-exim4.conf.conf
-sed -i "s/OMD_SMARTHOST/$OMD_SMARTHOST/g" /etc/exim4/update-exim4.conf.conf
-
-update-exim4.conf
+#if ![ -z "${OMD_SMARTHOST}" ]; then
+  echo "configuring smarthost..."
+  sed -i "s/OMD_HOSTNAME/$OMD_HOSTNAME/g" /etc/exim4/update-exim4.conf.conf
+  sed -i "s/OMD_EXIM_DOMAIN/$OMD_EXIM_DOMAIN/g" /etc/exim4/update-exim4.conf.conf
+  sed -i "s/OMD_SMARTHOST/$OMD_SMARTHOST/g" /etc/exim4/update-exim4.conf.conf
+  update-exim4.conf
+#fi
 echo
-
 echo "configuring zulip nagios plugin..."
 sed -i "s/OMD_ZULIP_EMAIL/$OMD_ZULIP_EMAIL/g" /etc/nagios3/zuliprc
 sed -i "s/OMD_ZULIP_KEY/$OMD_ZULIP_KEY/g" /etc/nagios3/zuliprc
@@ -106,11 +95,12 @@ echo
 
 omd config ${SITENAME} set CORE nagios
 omd config $SITENAME set THRUK_COOKIE_AUTH off
-sed -i '/default_theme/ s/Thruk2/Vautour/g' /omd/sites/monitor/etc/thruk/thruk.conf
+sed -i '/default_theme/ s/Thruk2/Vautour/g' /omd/sites/$SITENAME/etc/thruk/thruk.conf
 
 
 echo "omd-labs: Starting site $SITENAME..."
 echo "--------------------------------------"
+sudo su - $SITENAME -c "set_admin_password $OMDPASSWORD"
 omd start $SITENAME
 
 echo
