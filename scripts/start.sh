@@ -68,13 +68,14 @@ EOF
   su - $SITENAME -c 'lsyncd ~/.lsyncd'
 fi
 
-#if ![ -z "${OMD_SMARTHOST}" ]; then
+if [ ! -z "${OMD_SMARTHOST}" ]; then
   echo "configuring smarthost..."
+  mv /root/update-exim4.conf.conf /etc/exim4/update-exim4.conf.conf
   sed -i "s/OMD_HOSTNAME/$OMD_HOSTNAME/g" /etc/exim4/update-exim4.conf.conf
   sed -i "s/OMD_EXIM_DOMAIN/$OMD_EXIM_DOMAIN/g" /etc/exim4/update-exim4.conf.conf
   sed -i "s/OMD_SMARTHOST/$OMD_SMARTHOST/g" /etc/exim4/update-exim4.conf.conf
   update-exim4.conf
-#fi
+fi
 echo
 echo "configuring zulip nagios plugin..."
 sed -i "s/OMD_ZULIP_EMAIL/$OMD_ZULIP_EMAIL/g" /etc/nagios3/zuliprc
@@ -94,7 +95,7 @@ echo
 #sed -i '/^check_result_path/ s/naemon/nagios/' /omd/sites/$SITENAME/etc/naemon/naemon.d/omd.cfg
 
 omd config ${SITENAME} set CORE nagios
-omd config $SITENAME set THRUK_COOKIE_AUTH off
+omd config ${SITENAME} set THRUK_COOKIE_AUTH off
 sed -i '/default_theme/ s/Thruk2/Vautour/g' /omd/sites/$SITENAME/etc/thruk/thruk.conf
 
 
