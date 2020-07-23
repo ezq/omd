@@ -18,7 +18,7 @@ RUN $HOME/install_common.sh
 RUN $HOME/install_omd.sh
 RUN mkdir -p /etc/nagios3/
 ADD ./files/zuliprc /etc/nagios3/
-ADD ./files/update-exim4.conf.conf /etc/exim4/
+ADD ./files/update-exim4.conf.conf /root/
 ADD ./files/cpu_load.include /opt/omd/versions/default/share/check_mk/checks/
 
 
