@@ -1,4 +1,4 @@
-FROM debian:8
+FROM debian:9
 MAINTAINER Ezequiel M. Cardinali<ezequiel.caridnali@surhive.com>
 EXPOSE 80 443 22 4730 5666
 
@@ -37,6 +37,8 @@ ENV SITENAME=$SITENAME
 RUN echo "export SITENAME=$SITENAME" > .sitename.env
 RUN sed -i 's|echo "on"$|echo "off"|' /opt/omd/versions/default/lib/omd/hooks/TMPFS
 RUN echo "create OMD site: $SITENAME" && omd create -u 1000 -g 1000 $SITENAME || true
+ADD ./files/check_mk_templates.cfg /omd/sites/${SITENAME}/etc/core/conf.d/ 
+ADD ./files/EONFlatDark /omd/sites/${SITENAME}/etc/thruk/themes-enabled/EONFlatDark
 
 # -- ONBUILD
 # when used as a base image, this instructions trigger the creation of another site if NEW_SITENAME is not `demo`
