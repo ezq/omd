@@ -3,14 +3,14 @@ DISTRO=debian
 # local builds will be named like this
 REPO = local/omd-labs-$(DISTRO)
 BRANCH=v2.90
-TAG  = v2.90
+TAG  = v2.90_2
 # the final image name
 IMAGE=$(REPO):$(TAG)
 
 ifdef SITENAME
 	BUILDARGS = --build-arg SITENAME=$(SITENAME)
 else
-  SITENAME=monitoring
+  SITENAME=omd
 endif
 
 export DOCKER_REPO=index.docker.io/consol/omd-labs-$(DISTRO)
