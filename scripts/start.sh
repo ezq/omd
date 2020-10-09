@@ -96,8 +96,14 @@ echo
 
 omd config ${SITENAME} set CORE nagios
 omd config ${SITENAME} set THRUK_COOKIE_AUTH off
-sed -i '/default_theme/ s/Thruk2/Vautour/g' /omd/sites/$SITENAME/etc/thruk/thruk.conf
+omd config ${SITENAME} set PNP4NAGIOS off
+omd config ${SITENAME} set GRAFANA on
+omd config ${SITENAME} set INFLUXDB on
+omd config ${SITENAME} set NAGFLUX on
+omd config ${SITENAME} set INFLUXDB_HTTP_TCP_PORT 0.0.0.0:8086
 
+sed -i '/default_theme/ s/Thruk2/EONFlatDark/g' /omd/sites/${SITENAME}/etc/thruk/thruk.conf
+sed -i "/action_url/ s/SITENAME/${SITENAME}/g" /omd/sites/${SITENAME}/etc/core/conf.d/check_mk_templates.cfg
 
 echo "omd-labs: Starting site $SITENAME..."
 echo "--------------------------------------"
