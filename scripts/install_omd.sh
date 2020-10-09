@@ -9,10 +9,11 @@ echo 'net.ipv6.conf.all.disable_ipv6 = 1' >> /etc/sysctl.d/20-ipv6-disable.conf
 echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >> /etc/sysctl.d/20-ipv6-disable.conf
 cat /etc/sysctl.d/20-ipv6-disable.conf; sysctl -p
 
-gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys F8C1CA08A57B9ED7 && gpg --armor --export F8C1CA08A57B9ED7 | apt-key add -
+#gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys F8C1CA08A57B9ED7 && gpg --armor --export F8C1CA08A57B9ED7 | apt-key add -
+curl -s "https://labs.consol.de/repo/stable/RPM-GPG-KEY" | sudo apt-key add -
 echo "deb http://labs.consol.de/repo/stable/debian $(cat /etc/os-release  | grep 'VERSION=' | tr '(' ')' | cut -d ')' -f2) main" > /etc/apt/sources.list.d/labs-consol-testing.list
 apt-get update
-apt-get install -y $PACKAGENAME
+apt-get install --allow-unauthenticated -y $PACKAGENAME
 apt-get clean
 
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
